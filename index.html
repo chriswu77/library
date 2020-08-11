@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Library</title>
+        <link href='reset.css' rel='stylesheet'>
+        <link href="style.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class='main-container'>
+            <h1>Library</h1>
+
+            <div class='grid'>
+                <div class='book-card'>
+                    <p class='title'>Harry Potter</p>
+                    <p class='author'>J.K. Rowling</p>
+                    <p class='pages'>500 pages</p>
+                </div>
+            </div>
+        </div>
+
+        <div class='modal'>
+            <div class='modal-content'>
+                <form>
+                    <div class='div-spacing'>
+                        <label for="title">Enter the Title: </label>
+                        <input type="text" id="title" required>
+                    </div>
+
+                    <div class='div-spacing'>
+                        <label for="author">Enter the Author's Name: </label>
+                        <input type="text" id="title" required>
+                    </div>
+
+                    <div class='div-spacing'>
+                        <label for="pages">Enter the number of pages: </label>
+                        <input type="number" id="pages" required>
+                    </div>
+
+                    <div class='checkbox'>
+                        <label for="read">Did you read it yet?</label>
+                        <input type="checkbox" id="read" required>
+                    </div>
+
+                    <div class=div-spacing>
+                        <input type='submit' id='submit-btn'>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script src="script.js"></script>
+    </body>
+</html>
