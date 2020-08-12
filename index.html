@@ -22,7 +22,8 @@
 
         <div class='modal'>
             <div class='modal-content'>
-                <form>
+                <div id='close-btn'>+</div>
+                <form id='new-book-form'>
                     <div class='div-spacing'>
                         <label for="title">Enter the Title: </label>
                         <input type="text" id="title" required>
@@ -30,7 +31,7 @@
 
                     <div class='div-spacing'>
                         <label for="author">Enter the Author's Name: </label>
-                        <input type="text" id="title" required>
+                        <input type="text" id="author" required>
                     </div>
 
                     <div class='div-spacing'>
@@ -40,7 +41,7 @@
 
                     <div class='checkbox'>
                         <label for="read">Did you read it yet?</label>
-                        <input type="checkbox" id="read" required>
+                        <input type="checkbox" id="read">
                     </div>
 
                     <div class=div-spacing>
@@ -49,6 +50,10 @@
                 </form>
             </div>
         </div>
+
+        <button id='add-btn'>
+            <svg id='trash-btn' xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" version="1.1" x="0px" y="0px" viewBox="0 0 100 125"><g transform="translate(0,-952.36218)"><path style="text-indent:0;text-transform:none;direction:ltr;block-progression:tb;baseline-shift:baseline;color:#000000;enable-background:accumulate;" d="m 50,964.36218 c -2.7615,0 -5,2.2386 -5,5 l 0,28.0001 -28,0 c -2.7614,0 -5,2.2385 -5,5.00002 0,2.7615 2.2386,5 5,5 l 28,0 0,27.9999 c 0,2.7614 2.2385,5 5,5 2.7615,0 5,-2.2386 5,-5 l 0,-27.9999 28,0 c 2.7614,0 5,-2.2385 5,-5 0,-2.76152 -2.2386,-5.00002 -5,-5.00002 l -28,0 0,-28.0001 c 0,-2.7614 -2.2385,-5 -5,-5 z" fill="#000000" fill-opacity="1" stroke="none" marker="none" visibility="visible" display="inline" overflow="visible"/></g><text x="0" y="115" fill="#000000" font-size="5px" font-weight="bold" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif"></text><text x="0" y="120" fill="#000000" font-size="5px" font-weight="bold" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif"></text></svg>
+        </button>
 
         <script src="script.js"></script>
     </body>

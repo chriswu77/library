@@ -19,12 +19,13 @@ function addBookToLibrary(book) {
 const HungerGames = new Book('The Hunger Games', 'Suzanne Collins', 374, false)
 const ToKillAMockingbird = new Book('To Kill a Mockingbird', 'Harper Lee', 324, true);
 
-addBookToLibrary(HungerGames);
-addBookToLibrary(ToKillAMockingbird);
+// addBookToLibrary(HungerGames);
+// addBookToLibrary(ToKillAMockingbird);
 
 const libraryContainer = document.querySelector('.grid');
 
 function render() {
+    libraryContainer.innerHTML = '';
     myLibrary.forEach(book => {
         const card = document.createElement('div')
         const index = myLibrary.indexOf(book);
@@ -51,4 +52,35 @@ function render() {
     })
 }
 
-render();
+// render();
+
+const addBtn = document.querySelector('#add-btn');
+const modal = document.querySelector('.modal');
+const closeBtn = document.querySelector('#close-btn');
+const newBookForm = document.querySelector('#new-book-form');
+
+addBtn.addEventListener('click', () => {
+    modal.style.display = 'flex';
+})
+
+closeBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+})
+
+newBookForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    // read in title, author, pages, read status form values
+    let title = document.getElementById('title').value;
+    let author = document.getElementById('author').value;
+    let pages = document.getElementById('pages').value;
+    let readStatus = document.getElementById('read').checked;
+    const newBook = new Book(title, author, pages, readStatus);
+    console.log(newBook);
+    addBookToLibrary(newBook);
+    render();
+    // close form
+    modal.style.display = 'none';
+    //reset form values
+    newBookForm.reset();
+})
+
