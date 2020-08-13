@@ -32,6 +32,15 @@ function render() {
         card.setAttribute('data-index', `${index}`);
         card.classList.add('book-card');
 
+        const trashBtn = document.createElement('button');
+        trashBtn.classList.add('trash-btn');
+        const btnSpan = document.createElement('span');
+        btnSpan.classList.add('trash-style');
+        const trashIconHTML = '<i class="far fa-trash-alt"></i>';
+        btnSpan.innerHTML = trashIconHTML;
+        trashBtn.appendChild(btnSpan);
+        card.appendChild(trashBtn);
+
         const title = document.createElement('p');
         title.classList.add('title');
         title.textContent = book.title;
@@ -84,3 +93,27 @@ newBookForm.addEventListener('submit', (e) => {
     newBookForm.reset();
 })
 
+
+// add a button on each book's display to remove the book from the library
+// associate the DOM element with the actual book object. Give the DOM element a data-attribute that corresponds to the index of the library array
+
+// when rendering, attach the index of the current book to the DOM object
+// add eventlistener on the trash button
+// need to use bubbling since trash button isnt on the DOM in the beginning. use event.closest 
+// when trash button is clicked, get the index from the DOM's data for that book card. 
+// splice that book out of the library array
+// update the UI next
+// store the DOM using the data attribute
+// item.parentElement.removeChild(item)
+
+libraryContainer.addEventListener('click', e => {
+    const btn = e.target.closest('.trash-btn');
+    if (btn) {
+        const bookDOM = btn.parentElement;
+        const index = bookDOM.dataset.index;
+        //remove book from array
+        myLibrary.splice(index, 1);
+        // update UI
+        render();
+    }
+});

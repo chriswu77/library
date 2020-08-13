@@ -28,6 +28,7 @@ h1 {
     flex-direction: column;
     height: 300px;
     border: 1px solid black;
+    position: relative;
 }
 
 .title, .author, .pages {
@@ -132,11 +133,25 @@ label[for='title'], label[for='author'], label[for='pages'] {
     justify-content: center;
 }
 
-#add-btn:focus {
+#add-btn:focus, .trash-btn:focus {
     outline: none;
 }
 
-#trash-btn {
+#svg-style {
     height: 44px;
     width: 44px;
+    padding-top: 5px;
+}
+
+.trash-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.trash-style {
+    font-size: 20px;
 }
