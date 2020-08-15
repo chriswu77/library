@@ -24,6 +24,16 @@ const ToKillAMockingbird = new Book('To Kill a Mockingbird', 'Harper Lee', 324, 
 
 const libraryContainer = document.querySelector('.grid');
 
+Book.prototype.initialReadToggle = function() {
+    let string;
+    if (this.read) {
+        string = 'checked';
+    } else {
+        string = '';
+    }
+    return string;
+};
+
 function render() {
     libraryContainer.innerHTML = '';
     myLibrary.forEach(book => {
@@ -31,6 +41,11 @@ function render() {
         const index = myLibrary.indexOf(book);
         card.setAttribute('data-index', `${index}`);
         card.classList.add('book-card');
+
+        const toggleLabel = document.createElement('label');
+        toggleLabel.classList.add('switch');
+        toggleLabel.innerHTML = `<input type="checkbox" id="toggle-btn-${index}" ${book.initialReadToggle()}><span class="slider round"></span>`;
+        card.appendChild(toggleLabel);
 
         const trashBtn = document.createElement('button');
         trashBtn.classList.add('trash-btn');
@@ -57,7 +72,7 @@ function render() {
         pages.textContent = `${string} pages`;
         card.appendChild(pages);
 
-        libraryContainer.appendChild(card);     
+        libraryContainer.appendChild(card);   
     })
 }
 
@@ -94,26 +109,33 @@ newBookForm.addEventListener('submit', (e) => {
 })
 
 
-// add a button on each book's display to remove the book from the library
-// associate the DOM element with the actual book object. Give the DOM element a data-attribute that corresponds to the index of the library array
-
-// when rendering, attach the index of the current book to the DOM object
-// add eventlistener on the trash button
-// need to use bubbling since trash button isnt on the DOM in the beginning. use event.closest 
-// when trash button is clicked, get the index from the DOM's data for that book card. 
-// splice that book out of the library array
-// update the UI next
-// store the DOM using the data attribute
-// item.parentElement.removeChild(item)
+Book.prototype.toggleRead = function() {
+    this.read ? this.read = false: this.read = true;
+};
 
 libraryContainer.addEventListener('click', e => {
-    const btn = e.target.closest('.trash-btn');
-    if (btn) {
-        const bookDOM = btn.parentElement;
+    const trashBtn = e.target.closest('.trash-btn');
+    const readBtn = e.target.closest('.slider');
+    if (trashBtn) {
+        const bookDOM = trashBtn.parentElement;
         const index = bookDOM.dataset.index;
         //remove book from array
         myLibrary.splice(index, 1);
         // update UI
         render();
+    } else if (readBtn) {
+        const bookDOM = readBtn.parentElement.parentElement;
+        const index = bookDOM.dataset.index;
+        const book = myLibrary[index];
+
+        // update the UI to reflect new read value
+        const toggleBtn = document.getElementById(`toggle-btn-${index}`);
+
+        // change the read value
+        console.log(book.read);
+        book.toggleRead();
+        console.log(book.read);
+        // console.log(toggleBtn.checked);
     }
 });
+
