@@ -1,5 +1,6 @@
 
-let myLibrary = [];
+// let myLibrary = [];
+let myLibrary;
 
 function Book(title, author, pages, read) {
     this.title = title;
@@ -9,11 +10,11 @@ function Book(title, author, pages, read) {
     // this.info = function() {
     //     return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}`;
     // }
-}
+};
 
 function addBookToLibrary(book) {
     myLibrary.push(book);
-}
+};
 
 // const HarryPotter = new Book('Harry Potter', 'J.K. Rowling', 500, false);
 const HungerGames = new Book('The Hunger Games', 'Suzanne Collins', 374, false)
@@ -37,6 +38,8 @@ Book.prototype.initialReadToggle = function() {
 function render() {
     libraryContainer.innerHTML = '';
     myLibrary.forEach(book => {
+        // book.prototype = Book;
+        console.log(Object.getPrototypeOf(book));
         const card = document.createElement('div')
         const index = myLibrary.indexOf(book);
         card.setAttribute('data-index', `${index}`);
@@ -44,7 +47,9 @@ function render() {
 
         const toggleLabel = document.createElement('label');
         toggleLabel.classList.add('switch');
+        console.log(book);
         toggleLabel.innerHTML = `<input type="checkbox" id="toggle-btn-${index}" ${book.initialReadToggle()}><span class="slider round"></span>`;
+        console.log(toggleLabel.innerHTML);
         card.appendChild(toggleLabel);
 
         const trashBtn = document.createElement('button');
@@ -101,13 +106,13 @@ newBookForm.addEventListener('submit', (e) => {
     const newBook = new Book(title, author, pages, readStatus);
     console.log(newBook);
     addBookToLibrary(newBook);
+    saveToStorage(myLibrary);
     render();
     // close form
     modal.style.display = 'none';
     //reset form values
     newBookForm.reset();
 })
-
 
 Book.prototype.toggleRead = function() {
     this.read ? this.read = false: this.read = true;
@@ -139,3 +144,30 @@ libraryContainer.addEventListener('click', e => {
     }
 });
 
+function saveToStorage(libraryArray) {
+    localStorage.setItem('library', JSON.stringify(libraryArray));
+};
+
+window.addEventListener('load', () => {
+    // check if theres a library in local storage already
+    // const library = JSON.parse(localStorage.getItem('library'));
+    // if (!library) {
+    //     myLibrary = [];
+    // } else {
+    //     myLibrary = library;
+    //     render();
+    // }
+
+    if (!localStorage.getItem('library')) {
+        myLibrary = [];
+    } else {
+        myLibrary = JSON.parse(localStorage.getItem('library'));
+        // const newBook = new Book(title, author, pages, readStatus);
+        myLibrary = myLibrary.map(book => {
+        // re-create the books with the Book constructor
+        return new Book(book.title, book.author, book.pages, book.read)
+        });
+        render();
+    }
+    // console.log(myLibrary);
+});
