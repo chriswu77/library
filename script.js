@@ -1,45 +1,42 @@
-
-// let myLibrary = [];
 let myLibrary;
+const libraryContainer = document.querySelector('.grid');
+const addBtn = document.querySelector('#add-btn');
+const modal = document.querySelector('.modal');
+const closeBtn = document.querySelector('#close-btn');
+const newBookForm = document.querySelector('#new-book-form');
+const submitBtn = document.getElementById('submit-btn');
 
 function Book(title, author, pages, read) {
     this.title = title;
     this.author = author;
     this.pages = pages;
     this.read = read;
-    // this.info = function() {
-    //     return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}`;
-    // }
+    this.info = function() {
+        return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}`;
+    };
+};
+
+Book.prototype.initialReadToggle = function() {
+    let string;
+    this.read ? string = "checked" : string = "";
+    return string;
+};
+
+Book.prototype.toggleRead = function() {
+    this.read ? this.read = false : this.read = true;
 };
 
 function addBookToLibrary(book) {
     myLibrary.push(book);
 };
 
-// const HarryPotter = new Book('Harry Potter', 'J.K. Rowling', 500, false);
-const HungerGames = new Book('The Hunger Games', 'Suzanne Collins', 374, false)
-const ToKillAMockingbird = new Book('To Kill a Mockingbird', 'Harper Lee', 324, true);
-
-// addBookToLibrary(HungerGames);
-// addBookToLibrary(ToKillAMockingbird);
-
-const libraryContainer = document.querySelector('.grid');
-
-Book.prototype.initialReadToggle = function() {
-    let string;
-    if (this.read) {
-        string = "checked";
-    } else {
-        string = "";
-    }
-    return string;
+function saveToStorage(libraryArray) {
+    localStorage.setItem('library', JSON.stringify(libraryArray));
 };
 
 function render() {
     libraryContainer.innerHTML = '';
     myLibrary.forEach(book => {
-        // book.prototype = Book;
-        console.log(Object.getPrototypeOf(book));
         const card = document.createElement('div')
         const index = myLibrary.indexOf(book);
         card.setAttribute('data-index', `${index}`);
@@ -47,9 +44,7 @@ function render() {
 
         const toggleLabel = document.createElement('label');
         toggleLabel.classList.add('switch');
-        console.log(book);
-        toggleLabel.innerHTML = `<input type="checkbox" id="toggle-btn-${index}" ${book.initialReadToggle()}><span class="slider round"></span>`;
-        console.log(toggleLabel.innerHTML);
+        toggleLabel.innerHTML = `<input type="checkbox" ${book.initialReadToggle()}><span class="slider round"></span>`;
         card.appendChild(toggleLabel);
 
         const trashBtn = document.createElement('button');
@@ -81,21 +76,47 @@ function render() {
     })
 };
 
-const addBtn = document.querySelector('#add-btn');
-const modal = document.querySelector('.modal');
-const closeBtn = document.querySelector('#close-btn');
-const newBookForm = document.querySelector('#new-book-form');
-const submitBtn = document.getElementById('submit-btn');
+function formValidation() {
+    let title = document.getElementById('title').value;
+    let author = document.getElementById('author').value;
+    let pages = document.getElementById('pages').value;
+    if (title !== '' && author !== '' && pages !== '') {
+        //apply active state css
+        submitBtn.setAttribute('style', 'opacity: 1; border: 1.75px solid #5898DD;');
+    } else {
+        // grey it out again
+        submitBtn.setAttribute('style', 'opacity: 0.25');
+    }
+};
+
+window.addEventListener('load', () => {
+    if (!localStorage.getItem('library')) {
+        myLibrary = [];
+    } else {
+        myLibrary = JSON.parse(localStorage.getItem('library'));
+        // re-create the books with the Book constructor
+        myLibrary = myLibrary.map(book => {
+        return new Book(book.title, book.author, book.pages, book.read)
+        });
+        render();
+    }
+});
 
 addBtn.addEventListener('click', () => {
-    modal.style.display = 'flex';
+    modal.classList.add('open-modal');
 });
 
 closeBtn.addEventListener('click', () => {
-    modal.style.display = 'none';
+    modal.classList.remove('open-modal');
 });
 
-newBookForm.addEventListener('submit', (e) => {
+window.addEventListener('click', e => {
+    if (e.target.matches('.modal')) {
+        modal.classList.remove('open-modal');
+    }
+});
+
+newBookForm.addEventListener('submit', e => {
     e.preventDefault();
     // read in title, author, pages, read status form values
     const title = document.getElementById('title').value;
@@ -107,34 +128,15 @@ newBookForm.addEventListener('submit', (e) => {
     saveToStorage(myLibrary);
     render();
     // close form
-    modal.style.display = 'none';
+    modal.classList.remove('open-modal');
     //reset form values
     newBookForm.reset();
     submitBtn.setAttribute('style', 'opacity: 0.25');
 });
 
-function formValidation() {
-    let title = document.getElementById('title').value;
-    let author = document.getElementById('author').value;
-    let pages = document.getElementById('pages').value;
-    console.log(title,author,pages);
-    if (title !== '' && author !== '' && pages !== '') {
-        //apply active state css
-        submitBtn.setAttribute('style', 'opacity: 1; border: 1.75px solid #5898DD;');
-    } else {
-        // grey it out again
-        submitBtn.setAttribute('style', 'opacity: 0.25');
-    }
-};
-
-document.addEventListener('keyup', e => {
+document.addEventListener('keyup', () => {
     formValidation();
 });
-
-
-Book.prototype.toggleRead = function() {
-    this.read ? this.read = false: this.read = true;
-};
 
 libraryContainer.addEventListener('click', e => {
     const trashBtn = e.target.closest('.trash-btn');
@@ -151,32 +153,7 @@ libraryContainer.addEventListener('click', e => {
         const bookDOM = readBtn.parentElement.parentElement;
         const index = bookDOM.dataset.index;
         const book = myLibrary[index];
-
-        // update the UI to reflect new read value
-        const toggleBtn = document.getElementById(`toggle-btn-${index}`);
-
         // change the read value
-        console.log(book.read);
         book.toggleRead();
-        console.log(book.read);
-        // console.log(toggleBtn.checked);
-    }
-});
-
-function saveToStorage(libraryArray) {
-    localStorage.setItem('library', JSON.stringify(libraryArray));
-};
-
-window.addEventListener('load', () => {
-    if (!localStorage.getItem('library')) {
-        myLibrary = [];
-    } else {
-        myLibrary = JSON.parse(localStorage.getItem('library'));
-
-        // re-create the books with the Book constructor
-        myLibrary = myLibrary.map(book => {
-        return new Book(book.title, book.author, book.pages, book.read)
-        });
-        render();
     }
 });
