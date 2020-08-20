@@ -90,6 +90,7 @@ function formValidation() {
 };
 
 window.addEventListener('load', () => {
+    modal.classList.remove('open-modal');
     if (!localStorage.getItem('library')) {
         myLibrary = [];
     } else {
